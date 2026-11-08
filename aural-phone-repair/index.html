@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURAL // Hardware Lab — Assistência Técnica de Alta Fidelidade & Boutique</title>
+  <meta name="description" content="Assistência técnica cirúrgica para smartphones premium e boutique de acessórios de alta performance. Experiência 3D interativa com iPhone 14 Pro.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            aural: {
+              blue: '#0066ff',
+              cyan: '#00f0ff',
+              sky: '#38bdf8',
+              ice: '#93c5fd',
+              bg: '#030508',
+              card: '#080c14'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Three.js and GLTFLoader -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <!-- Custom Styles (Blue, Black & White System) -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#030508] text-slate-100 selection:bg-blue-600 selection:text-white">
+
+  <!-- ==========================================
+       HEADER & NAVIGATION
+  =========================================== -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-[#030508]/85 backdrop-blur-xl border-b border-white/[0.08] transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600/25 to-blue-500/10 border border-blue-500/35 flex items-center justify-center group-hover:border-blue-400 group-hover:shadow-[0_0_15px_rgba(0,102,255,0.4)] transition-all">
+          <i data-lucide="cpu" class="w-5 h-5 text-blue-400"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-display font-bold text-lg tracking-wider text-white">AURAL</span>
+            <span class="text-[10px] font-mono text-zinc-500">//</span>
+            <span class="text-xs font-mono text-zinc-300 tracking-widest uppercase">HARDWARE LAB</span>
+          </div>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+            <span class="text-[9px] font-mono text-blue-400 tracking-wider">ATELIER OPERACIONAL</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#phone-3d-section" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
+          01 // CELULAR 3D
+        </a>
+        <a href="#servicos" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
+          02 // SERVIÇOS
+        </a>
+        <a href="#orcamento" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
+          03 // SIMULADOR
+        </a>
+        <a href="#boutique" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
+          04 // BOUTIQUE
+        </a>
+        <a href="#padrao-aural" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
+          05 // LABORATÓRIO
+        </a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-4">
+        
+        <!-- Cart Trigger Button -->
+        <button class="btn-open-cart relative p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:border-blue-500/50 hover:bg-white/[0.08] text-white transition-all" aria-label="Abrir Sacola">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-white"></i>
+          <span class="cart-count-badge hidden absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-mono font-bold flex items-center justify-center shadow-[0_0_10px_rgba(0,102,255,0.8)]">0</span>
+        </button>
+
+        <!-- CTA Agendar Reparo -->
+        <a href="#orcamento" class="hidden sm:inline-flex btn-primary text-xs py-2.5 px-5">
+          <i data-lucide="wrench" class="w-4 h-4"></i>
+          <span>Agendar Reparo</span>
+        </a>
+
+        <!-- Mobile Menu Trigger -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-zinc-400 hover:text-white" aria-label="Menu Mobile">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-[#070a14]/98 border-b border-white/[0.08] px-6 py-6 space-y-4">
+      <a href="#phone-3d-section" class="block text-sm font-mono text-zinc-300 hover:text-blue-400">01 // CELULAR 3D</a>
+      <a href="#servicos" class="block text-sm font-mono text-zinc-300 hover:text-blue-400">02 // SERVIÇOS CIRÚRGICOS</a>
+      <a href="#orcamento" class="block text-sm font-mono text-zinc-300 hover:text-blue-400">03 // SIMULADOR DE ORÇAMENTO</a>
+      <a href="#boutique" class="block text-sm font-mono text-zinc-300 hover:text-blue-400">04 // BOUTIQUE DE ACESSÓRIOS</a>
+      <a href="#padrao-aural" class="block text-sm font-mono text-zinc-300 hover:text-blue-400">05 // PADRÃO LABORATÓRIO</a>
+      <div class="pt-4 border-t border-white/10">
+        <a href="#orcamento" class="btn-primary w-full text-center text-xs py-3">Agendar Reparo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       INTERACTIVE 3D PHONE STAGE
+       (The 3D Smartphone is visible immediately on load!)
+  =========================================== -->
+  <section id="phone-3d-section" class="relative">
+    <div id="sticky-viewport">
+      
+      <!-- 3D WebGL Canvas Container -->
+      <div id="phone-canvas-container"></div>
+      
+      <!-- High-tech Grid Overlay in Blue -->
+      <div class="canvas-grid-bg"></div>
+
+      <!-- Ambient Blue light glow -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[650px] h-[340px] bg-blue-600/15 blur-[140px] rounded-full pointer-events-none"></div>
+
+      <!-- ==========================================
+           HERO INTRO OVERLAY (Visible on page load)
+      =========================================== -->
+      <div id="hero-intro-overlay" class="absolute inset-0 z-20 flex flex-col items-center justify-between pt-24 pb-10 px-4 sm:px-6 pointer-events-none transition-all duration-300">
+        
+        <!-- Top Hero Text -->
+        <div class="text-center max-w-4xl mx-auto">
+          <div class="inline-flex items-center gap-2 mb-3 pointer-events-auto">
+            <span class="badge-blue">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-400"></i>
+              PRECISION ENGINEERED RESTORATION
+            </span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-display font-bold tracking-tight text-white uppercase leading-[1.08]">
+            A Engenharia da Restauração de <span class="text-gradient-blue">Alta Fidelidade.</span>
+          </h1>
+
+          <p class="mt-3 text-xs sm:text-sm text-zinc-300 max-w-xl mx-auto font-light leading-relaxed">
+            Assistência técnica de precisão cirúrgica em ambiente controlado para smartphones premium. Diagnósticos microscópicos e curadoria de hardware de alta performance.
+          </p>
+
+          <div class="mt-5 flex flex-wrap items-center justify-center gap-3 pointer-events-auto">
+            <a href="#orcamento" class="btn-primary text-xs py-2.5 px-5">
+              <i data-lucide="wrench" class="w-4 h-4"></i>
+              <span>Agendar Reparo</span>
+            </a>
+            <a href="#boutique" class="btn-secondary text-xs py-2.5 px-5">
+              <i data-lucide="shopping-bag" class="w-4 h-4 text-blue-400"></i>
+              <span>Boutique de Acessórios</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Bottom Directive Prompt -->
+        <div class="flex flex-col items-center justify-center gap-2 text-zinc-300 animate-bounce pointer-events-auto">
+          <span class="text-[10px] font-mono tracking-[0.25em] uppercase text-blue-300">MOVA O CURSOR PARA INCLINAR · ARRASTE PARA GIRAR</span>
+          <span class="text-[9px] font-mono text-zinc-500">SEGURE E ARRASTE PARA VER A TRASEIRA</span>
+          <span class="text-[8px] font-mono text-zinc-600">MODELO 3D: IPHONE 14 PRO · MISTER DUDE / SKETCHFAB · CC BY 4.0</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       TECHNICAL TRUST METRICS STRIP
+  =========================================== -->
+  <section class="py-12 border-y border-white/[0.08] bg-[#050810]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="aural-card p-5 text-center">
+          <span class="text-2xl sm:text-3xl font-display font-bold text-white block">1 ANO</span>
+          <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider mt-1 block">Garantia Integral</span>
+        </div>
+        <div class="aural-card p-5 text-center">
+          <span class="text-2xl sm:text-3xl font-display font-bold text-blue-400 block">40 MIN</span>
+          <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider mt-1 block">Tempo Médio Troca</span>
+        </div>
+        <div class="aural-card p-5 text-center">
+          <span class="text-2xl sm:text-3xl font-display font-bold text-white block">CLASSE 1000</span>
+          <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider mt-1 block">Sala Limpa Anti-Pó</span>
+        </div>
+        <div class="aural-card p-5 text-center">
+          <span class="text-2xl sm:text-3xl font-display font-bold text-cyan-400 block">100%</span>
+          <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider mt-1 block">Dados Preservados</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SPECIALIZED REPAIR SERVICES SECTION
+  =========================================== -->
+  <section id="servicos" class="py-28 relative border-t border-white/[0.08] bg-[#050810]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-20">
+        <span class="badge-blue mb-3">
+          <i data-lucide="wrench" class="w-3.5 h-3.5 text-blue-400"></i>
+          PROTOCOLO CIRÚRGICO EM NÍVEL COMPONENTE
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight uppercase">
+          Serviços de Laboratório & <span class="text-gradient-blue">Restauração</span>
+        </h2>
+        <p class="mt-4 text-sm sm:text-base text-zinc-300 font-light">
+          Cada smartphone é tratado como uma obra de alta relojoaria. Processos executados em microscópios estéreo e câmara de vácuo para manter 100% da integridade de fábrica.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Service 1: Tela OLED & Vidro a Laser -->
+        <div class="aural-card aural-card-blue p-8 tech-bracket">
+          <div class="w-12 h-12 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_15px_rgba(0,102,255,0.25)]">
+            <i data-lucide="smartphone" class="w-6 h-6"></i>
+          </div>
+          <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">[PROCEDIMENTO 01]</span>
+          <h3 class="text-xl font-display font-bold text-white mt-1">Troca de Vidro & Display 120Hz</h3>
+          <p class="text-sm text-zinc-400 mt-3 leading-relaxed">
+            Separamos o vidro quebrado através de separador criogênico a -150°C, preservando o display OLED original, a calibração de cor True Tone e a taxa de 120Hz ProMotion.
+          </p>
+          <div class="mt-6 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
+            <span>⏱ 40 a 50 minutos</span>
+            <span class="text-cyan-400">🛡 1 Ano Garantia</span>
+          </div>
+        </div>
+
+        <!-- Service 2: Micro-soldagem de Placa & CPU -->
+        <div class="aural-card aural-card-blue p-8 tech-bracket">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <i data-lucide="cpu" class="w-6 h-6"></i>
+          </div>
+          <span class="text-xs font-mono text-cyan-400 uppercase tracking-widest">[PROCEDIMENTO 02]</span>
+          <h3 class="text-xl font-display font-bold text-white mt-1">Micro-soldagem em Placa Lógica</h3>
+          <p class="text-sm text-zinc-400 mt-3 leading-relaxed">
+            Reparo cirúrgico de trilhas interrompidas, curto-circuito em linhas de alimentação primária (VCC_MAIN), substituição de CI de carga e reballing de processador.
+          </p>
+          <div class="mt-6 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
+            <span>⏱ 2 a 4 horas</span>
+            <span class="text-cyan-400">🛡 1 Ano Garantia</span>
+          </div>
+        </div>
+
+        <!-- Service 3: Bateria de Alta Densidade -->
+        <div class="aural-card aural-card-blue p-8 tech-bracket">
+          <div class="w-12 h-12 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_15px_rgba(0,102,255,0.25)]">
+            <i data-lucide="battery-charging" class="w-6 h-6"></i>
+          </div>
+          <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">[PROCEDIMENTO 03]</span>
+          <h3 class="text-xl font-display font-bold text-white mt-1">Bateria Hyper-Core Homologada</h3>
+          <p class="text-sm text-zinc-400 mt-3 leading-relaxed">
+            Substituição com transplante de BMS original para manter a indicação de 100% de saúde no iOS/Android sem avisos de peça desconhecida. Células de grafeno grau A+.
+          </p>
+          <div class="mt-6 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
+            <span>⏱ 35 minutos</span>
+            <span class="text-cyan-400">🛡 1 Ano Garantia</span>
+          </div>
+        </div>
+
+        <!-- Service 4: Câmeras Studio Pro & Lentes -->
+        <div class="aural-card aural-card-blue p-8 tech-bracket">
+          <div class="w-12 h-12 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-6 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+            <i data-lucide="camera" class="w-6 h-6"></i>
+          </div>
+          <span class="text-xs font-mono text-sky-400 uppercase tracking-widest">[PROCEDIMENTO 04]</span>
+          <h3 class="text-xl font-display font-bold text-white mt-1">Calibração de Câmera & OIS</h3>
+          <p class="text-sm text-zinc-400 mt-3 leading-relaxed">
+            Eliminação de tremidos e falhas de foco causados por vibrações em suportes de moto. Troca de lentes individuais de cristal de safira sem trocar todo o módulo.
+          </p>
+          <div class="mt-6 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
+            <span>⏱ 45 minutos</span>
+            <span class="text-cyan-400">🛡 1 Ano Garantia</span>
+          </div>
+        </div>
+
+        <!-- Service 5: Banho Químico Ultrassônico -->
+        <div class="aural-card aural-card-blue p-8 tech-bracket">
+          <div class="w-12 h-12 rounded-xl bg-indigo-600/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-6 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+            <i data-lucide="droplet" class="w-6 h-6"></i>
+          </div>
+          <span class="text-xs font-mono text-indigo-400 uppercase tracking-widest">[PROCEDIMENTO 05]</span>
+          <h3 class="text-xl font-display font-bold text-white mt-1">Desoxidação em Banho Químico</h3>
+          <p class="text-sm text-zinc-400 mt-3 leading-relaxed">
+            Tratamento de choques térmicos e aparelhos submersos em água doce ou salgada. Remoção completa de corrosão em câmara ultrassônica com álcool isopropílico 99.8%.
+          </p>
+          <div class="mt-6 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
+            <span>⏱ 1 a 2 horas</span>
+            <span class="text-cyan-400">🛡 Laudo Técnico</span>
+          </div>
+        </div>
+
+        <!-- Service 6: Vidro Traseiro a Laser -->
+        <div class="aural-card aural-card-blue p-8 tech-bracket">
+          <div class="w-12 h-12 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_15px_rgba(0,102,255,0.25)]">
+            <i data-lucide="zap" class="w-6 h-6"></i>
+          </div>
+          <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">[PROCEDIMENTO 06]</span>
+          <h3 class="text-xl font-display font-bold text-white mt-1">Troca de Tampa Traseira a Laser</h3>
+          <p class="text-sm text-zinc-400 mt-3 leading-relaxed">
+            Máquina a laser de fibra óptica programada que vaporiza a cola epóxi interna sem necessidade de desmontar componentes sensíveis, preservando a bobina MagSafe.
+          </p>
+          <div class="mt-6 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-300">
+            <span>⏱ 40 minutos</span>
+            <span class="text-cyan-400">🛡 1 Ano Garantia</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       INSTANT QUOTE SIMULATOR CALCULATOR
+  =========================================== -->
+  <section id="orcamento" class="py-28 relative border-t border-white/[0.08] bg-[#030508]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="badge-blue mb-3">
+          <i data-lucide="calculator" class="w-3.5 h-3.5 text-blue-400"></i>
+          SIMULAÇÃO EM TEMPO REAL
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight uppercase">
+          Calculadora de <span class="text-gradient-blue">Orçamento Instantâneo</span>
+        </h2>
+        <p class="mt-4 text-sm sm:text-base text-zinc-300 font-light">
+          Selecione o modelo do seu dispositivo e os sintomas identificados para obter uma estimativa imediata de valores, tempo de execução e garantia.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Device & Issue Selectors (8 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Step 1: Device Selection -->
+          <div class="aural-card p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-6 h-6 rounded-full bg-blue-600/25 border border-blue-500/40 text-blue-400 font-mono text-xs flex items-center justify-center font-bold">01</span>
+              <h3 class="text-base font-display font-semibold text-white uppercase">Selecione a Marca e Modelo</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-mono text-zinc-400 mb-1.5 uppercase">Fabricante / Linha</label>
+                <select id="calc-brand-select" class="w-full bg-[#0a101d] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-display">
+                  <option value="apple">Apple (iPhone Series)</option>
+                  <option value="samsung">Samsung (Galaxy S & Z)</option>
+                  <option value="xiaomi">Xiaomi (Ultra & Pro)</option>
+                  <option value="google">Google (Pixel Pro Series)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-mono text-zinc-400 mb-1.5 uppercase">Modelo Específico</label>
+                <select id="calc-model-select" class="w-full bg-[#0a101d] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-display">
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Symptom / Service Selector -->
+          <div class="aural-card p-6">
+            <div class="flex items-center justify-between gap-3 mb-4">
+              <div class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-full bg-blue-600/25 border border-blue-500/40 text-blue-400 font-mono text-xs flex items-center justify-center font-bold">02</span>
+                <h3 class="text-base font-display font-semibold text-white uppercase">Selecione o(s) Reparo(s) Necessário(s)</h3>
+              </div>
+              <span class="text-[11px] font-mono text-zinc-400">Múltipla escolha</span>
+            </div>
+
+            <!-- Issues Checkboxes Container -->
+            <div id="calc-issues-container" class="space-y-3">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Live Quote Summary Card (5 cols) -->
+        <div class="lg:col-span-5 sticky top-28">
+          <div class="aural-card aural-card-blue p-8 tech-bracket">
+            
+            <div class="flex items-center justify-between border-b border-white/[0.08] pb-4">
+              <div>
+                <span class="badge-blue text-[10px]">DIAGNÓSTICO PRELIMINAR</span>
+                <h3 class="text-xl font-display font-bold text-white mt-1">Resumo do Atendimento</h3>
+              </div>
+              <i data-lucide="shield-check" class="w-8 h-8 text-blue-400"></i>
+            </div>
+
+            <!-- Selected Services Pills -->
+            <div class="mt-6">
+              <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider block mb-2">Serviços Inclusos:</span>
+              <div id="calc-issue-summary" class="flex flex-wrap gap-2">
+                <!-- Injected in app.js -->
+              </div>
+            </div>
+
+            <!-- Execution Time and Warranty -->
+            <div class="mt-6 p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-zinc-400">Tempo Estimado de Espera:</span>
+                <span id="calc-est-time" class="text-blue-400 font-semibold">45 minutos</span>
+              </div>
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-zinc-400">Garantia Certificada AURAL:</span>
+                <span class="text-cyan-400 font-semibold">12 Meses Integral</span>
+              </div>
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-zinc-400">Preservação de Dados:</span>
+                <span class="text-white font-semibold">100% Inviolado</span>
+              </div>
+            </div>
+
+            <!-- Total Price Display -->
+            <div class="mt-8 pt-6 border-t border-white/[0.08]">
+              <span class="text-xs font-mono text-zinc-400 uppercase tracking-widest block">VALOR ESTIMADO TOTAL</span>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span id="calc-total-price" class="text-4xl font-display font-bold text-white tracking-tight">R$ 580,00</span>
+                <span class="text-xs font-mono text-zinc-400">em até 10x sem juros</span>
+              </div>
+              <p class="text-[11px] text-zinc-400 mt-1">
+                *O valor final é confirmado após inspeção microscópica sem custo na bancada.
+              </p>
+            </div>
+
+            <!-- CTA Agendar via WhatsApp -->
+            <div class="mt-8">
+              <a id="btn-whatsapp-repair" href="#" target="_blank" class="btn-primary w-full text-sm py-4 flex items-center justify-center gap-2">
+                <i data-lucide="message-square" class="w-5 h-5"></i>
+                <span>Solicitar Reparo via WhatsApp</span>
+              </a>
+              <span class="block text-center text-[10px] font-mono text-zinc-400 mt-2">
+                Resposta média em menos de 5 minutos
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       ACCESSORIES BOUTIQUE SECTION
+  =========================================== -->
+  <section id="boutique" class="py-28 relative border-t border-white/[0.08] bg-[#050812]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+        <div>
+          <span class="badge-blue mb-3">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-blue-400"></i>
+            CURADORIA DE ALTA PERFORMANCE
+          </span>
+          <h2 class="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight uppercase">
+            Boutique de <span class="text-gradient-blue">Acessórios de Luxo</span>
+          </h2>
+          <p class="mt-3 text-sm sm:text-base text-zinc-300 font-light max-w-xl">
+            Componentes periféricos selecionados por engenheiros. Materiais nobres como fibra de Kevlar 1500D, cristais de safira pura e condutores de alta fidelidade.
+          </p>
+        </div>
+
+        <!-- Filter tabs in Blue -->
+        <div class="flex flex-wrap gap-2">
+          <button data-filter="all" class="px-3.5 py-1.5 rounded-lg bg-blue-600/20 border border-blue-500/50 text-blue-400 text-xs font-mono transition-all">
+            Todos
+          </button>
+          <button data-filter="audio" class="px-3.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:text-white text-xs font-mono transition-all">
+            Áudio Hi-Res
+          </button>
+          <button data-filter="cases" class="px-3.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:text-white text-xs font-mono transition-all">
+            Capas Kevlar
+          </button>
+          <button data-filter="chargers" class="px-3.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:text-white text-xs font-mono transition-all">
+            Carregadores GaN
+          </button>
+          <button data-filter="protection" class="px-3.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:text-white text-xs font-mono transition-all">
+            Películas Safira
+          </button>
+        </div>
+      </div>
+
+      <!-- Accessories Grid (Injected via app.js) -->
+      <div id="accessories-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Rendered dynamically -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       AURAL ENGINEERING STANDARDS (LAB PROTOCOL)
+  =========================================== -->
+  <section id="padrao-aural" class="py-28 relative border-t border-white/[0.08] bg-[#030508]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-20">
+        <span class="badge-cyan mb-3">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5 text-cyan-400"></i>
+          RIGOR TÉCNICO CIRÚRGICO
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight uppercase">
+          O Padrão AURAL de <span class="text-gradient-silver">Precisão Laboratorial</span>
+        </h2>
+        <p class="mt-4 text-sm sm:text-base text-zinc-300 font-light">
+          Acreditamos que a tecnologia moderna merece o mesmo respeito artesanal de um cronógrafo suíço. Conheça nossos 4 pilares de integridade.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="aural-card p-6">
+          <div class="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 shadow-[0_0_12px_rgba(0,102,255,0.2)]">
+            <i data-lucide="eye" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-display font-semibold text-white">Microscopia 4K</h3>
+          <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+            Diagnóstico com ampliação óptica de 45x e câmera termográfica infravermelha Flir para mapear fugas térmicas de corrente em milissegundos.
+          </p>
+        </div>
+
+        <div class="aural-card p-6">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-4 shadow-[0_0_12px_rgba(0,240,255,0.2)]">
+            <i data-lucide="wind" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-display font-semibold text-white">Sala Limpa Classe 1000</h3>
+          <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+            Fluxo laminar de ar com filtragem HEPA que impede a entrada de qualquer micro-partícula de poeira entre as camadas da tela e lentes.
+          </p>
+        </div>
+
+        <div class="aural-card p-6">
+          <div class="w-10 h-10 rounded-xl bg-white/[0.08] border border-white/20 flex items-center justify-center text-white mb-4 shadow-[0_0_12px_rgba(255,255,255,0.15)]">
+            <i data-lucide="shield" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-display font-semibold text-white">1 Ano de Garantia</h3>
+          <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+            Certificado físico e digital assinado com número de série criptográfico rastreável. Total respaldo contra defeitos ou descalibração.
+          </p>
+        </div>
+
+        <div class="aural-card p-6">
+          <div class="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 shadow-[0_0_12px_rgba(0,102,255,0.2)]">
+            <i data-lucide="lock" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-display font-semibold text-white">Privacidade & Dados 100%</h3>
+          <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+            Procedimento sem necessidade de senha de desbloqueio em trocas de tela ou bateria. Seus dados e fotos permanecem inviolados.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       VERIFIED TESTIMONIALS
+  =========================================== -->
+  <section class="py-24 border-t border-white/[0.08] bg-[#050711]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-14">
+        <div>
+          <span class="badge-blue mb-2">EXPERIÊNCIA VERIFICADA</span>
+          <h2 class="text-2xl sm:text-4xl font-display font-bold text-white uppercase">Avaliações de Clientes</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="flex text-blue-400">
+            <i data-lucide="star" class="w-4 h-4 fill-blue-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-blue-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-blue-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-blue-400"></i>
+            <i data-lucide="star" class="w-4 h-4 fill-blue-400"></i>
+          </div>
+          <span class="text-xs font-mono text-zinc-300">4.9 / 5.0 (Mais de 1.400 reparos homologados)</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="aural-card p-6">
+          <div class="flex items-center gap-1 text-blue-400 mb-3">
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+          </div>
+          <p class="text-xs text-zinc-300 leading-relaxed font-light">
+            "Troquei o vidro frontal do meu 15 Pro Max. Na autorizada queriam trocar o aparelho inteiro por um valor absurdo. Na Aural mantiveram meu display original de 120Hz intacto e o aparelho ficou novo em 40 minutos!"
+          </p>
+          <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between">
+            <span class="text-xs font-display font-semibold text-white">Rodrigo M. Silveira</span>
+            <span class="text-[10px] font-mono text-blue-400">iPhone 15 Pro Max</span>
+          </div>
+        </div>
+
+        <div class="aural-card p-6">
+          <div class="flex items-center gap-1 text-blue-400 mb-3">
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+          </div>
+          <p class="text-xs text-zinc-300 leading-relaxed font-light">
+            "Meu Galaxy S24 Ultra caiu na piscina e apagou. Fizeram o banho químico ultrassônico e recuperaram a placa sem perda de nenhum dado de trabalho. O atendimento é nível hospitalar de tecnologia."
+          </p>
+          <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between">
+            <span class="text-xs font-display font-semibold text-white">Dra. Camila Vasconcellos</span>
+            <span class="text-[10px] font-mono text-cyan-400">Galaxy S24 Ultra</span>
+          </div>
+        </div>
+
+        <div class="aural-card p-6">
+          <div class="flex items-center gap-1 text-blue-400 mb-3">
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+            <i data-lucide="star" class="w-3.5 h-3.5 fill-blue-400"></i>
+          </div>
+          <p class="text-xs text-zinc-300 leading-relaxed font-light">
+            "A capinha de Kevlar e a bateria nova deixaram meu celular com autonomia para o dia todo. O cabo com mostrador de Watts é surreal de bem feito. Recomendo de olhos fechados."
+          </p>
+          <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between">
+            <span class="text-xs font-display font-semibold text-white">Lucas Takahashi</span>
+            <span class="text-[10px] font-mono text-blue-400">Acessórios & Bateria</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FREQUENTLY ASKED QUESTIONS (FAQ)
+  =========================================== -->
+  <section class="py-24 border-t border-white/[0.08] bg-[#030508]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-14">
+        <span class="badge-blue mb-2">ESCLARECIMENTOS</span>
+        <h2 class="text-2xl sm:text-4xl font-display font-bold text-white uppercase">Perguntas Frequentes</h2>
+      </div>
+
+      <div class="space-y-4">
+        
+        <div class="aural-card">
+          <button class="faq-toggle w-full p-6 text-left flex items-center justify-between gap-4">
+            <span class="text-sm font-display font-semibold text-white">Eu perco meus dados e fotos durante o conserto?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-4 h-4 text-blue-400 transition-transform"></i>
+          </button>
+          <div class="hidden px-6 pb-6 text-xs text-zinc-300 leading-relaxed border-t border-white/[0.06] pt-4">
+            Não. Na AURAL todos os reparos estruturais (tela, vidro, bateria, câmeras e conectores) são realizados sem formatação ou reset. Seus dados, conversas e aplicativos permanecem exatamente como estavam.
+          </div>
+        </div>
+
+        <div class="aural-card">
+          <button class="faq-toggle w-full p-6 text-left flex items-center justify-between gap-4">
+            <span class="text-sm font-display font-semibold text-white">A tela continuará com 120Hz ProMotion e True Tone?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-4 h-4 text-blue-400 transition-transform"></i>
+          </button>
+          <div class="hidden px-6 pb-6 text-xs text-zinc-300 leading-relaxed border-t border-white/[0.06] pt-4">
+            Sim! Se o seu display interno não estiver manchado e apenas o vidro quebrou, trocamos apenas o vidro com máquina de vácuo OCA, preservando seu display OLED original e reprogramando o chip EEPROM para manter o True Tone e a fluidez de 120Hz.
+          </div>
+        </div>
+
+        <div class="aural-card">
+          <button class="faq-toggle w-full p-6 text-left flex items-center justify-between gap-4">
+            <span class="text-sm font-display font-semibold text-white">Quanto tempo leva o reparo de bateria ou tela?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-4 h-4 text-blue-400 transition-transform"></i>
+          </button>
+          <div class="hidden px-6 pb-6 text-xs text-zinc-300 leading-relaxed border-t border-white/[0.06] pt-4">
+            Em média, de 35 a 50 minutos com agendamento prévio. Você pode aguardar confortavelmente no lounge do nosso Atelier enquanto nosso técnico realiza o serviço na sala limpa.
+          </div>
+        </div>
+
+        <div class="aural-card">
+          <button class="faq-toggle w-full p-6 text-left flex items-center justify-between gap-4">
+            <span class="text-sm font-display font-semibold text-white">Como funciona a garantia de 1 ano?</span>
+            <i data-lucide="chevron-down" class="faq-icon w-4 h-4 text-blue-400 transition-transform"></i>
+          </button>
+          <div class="hidden px-6 pb-6 text-xs text-zinc-300 leading-relaxed border-t border-white/[0.06] pt-4">
+            Você recebe um certificado com selo de garantia de 12 meses cobrindo qualquer anomalia de touch, descolamento de aro, falha de bateria ou instabilidade de componente instalado.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       CART SLIDE-OVER DRAWER
+  =========================================== -->
+  <div id="cart-overlay" class="fixed inset-0 bg-black/75 backdrop-blur-md z-[100] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-[#070b16] border-l border-white/[0.08] z-[101] translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+    
+    <!-- Drawer Header -->
+    <div class="p-6 border-b border-white/[0.08] flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i data-lucide="shopping-bag" class="w-5 h-5 text-blue-400"></i>
+        <h3 class="font-display font-bold text-lg text-white">Sua Sacola AURAL</h3>
+      </div>
+      <button id="btn-close-cart" class="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/[0.05]" aria-label="Fechar Sacola">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Items List Container -->
+    <div id="cart-items-list" class="flex-1 overflow-y-auto p-6 space-y-3">
+      <!-- Injected in app.js -->
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="p-6 border-t border-white/[0.08] bg-[#050812]">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Subtotal:</span>
+        <span id="cart-subtotal" class="text-xl font-display font-bold text-white">R$ 0,00</span>
+      </div>
+      <a id="btn-checkout-whatsapp" href="#" target="_blank" class="btn-primary w-full text-center text-xs py-3.5 flex items-center justify-center gap-2">
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+        <span>Finalizar Pedido via WhatsApp</span>
+      </a>
+      <span class="block text-center text-[10px] font-mono text-zinc-400 mt-2">
+        Envio express ou retirada no Atelier
+      </span>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- ==========================================
+       FOOTER & ATELIER LOCATION
+  =========================================== -->
+  <footer class="border-t border-white/[0.08] bg-[#020306] py-16 text-zinc-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-14">
+        
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="font-display font-bold text-xl tracking-wider text-white">AURAL</span>
+            <span class="text-xs font-mono text-blue-400">// HARDWARE LAB</span>
+          </div>
+          <p class="text-xs text-zinc-400 leading-relaxed font-light">
+            Atelier especializado em recuperação de microeletrônica, restauração de chassis e curadoria de hardware de alta fidelidade.
+          </p>
+          <div class="flex items-center gap-3 text-zinc-400">
+            <a href="#" class="hover:text-blue-400 transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+            <a href="#" class="hover:text-blue-400 transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+            <a href="#" class="hover:text-blue-400 transition-colors"><i data-lucide="map-pin" class="w-4 h-4"></i></a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-mono uppercase tracking-widest text-white mb-4">Navegação Rápida</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#phone-3d-section" class="hover:text-blue-400 transition-colors">iPhone 14 Pro em 3D</a></li>
+            <li><a href="#servicos" class="hover:text-blue-400 transition-colors">Serviços Especializados</a></li>
+            <li><a href="#orcamento" class="hover:text-blue-400 transition-colors">Calculadora de Orçamento</a></li>
+            <li><a href="#boutique" class="hover:text-blue-400 transition-colors">Boutique de Acessórios</a></li>
+            <li><a href="#padrao-aural" class="hover:text-blue-400 transition-colors">Normas de Sala Limpa</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-mono uppercase tracking-widest text-white mb-4">Atelier & Horários</h4>
+          <p class="text-xs leading-relaxed text-zinc-300">
+            Av. Brigadeiro Faria Lima, 3477 — Itaim Bibi<br>
+            São Paulo - SP, Brasil<br><br>
+            <strong class="text-white">Segunda a Sexta:</strong> 09h às 19h<br>
+            <strong class="text-white">Sábados:</strong> 09h às 15h
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-mono uppercase tracking-widest text-white mb-4">Atendimento Direto</h4>
+          <p class="text-xs leading-relaxed mb-4 text-zinc-400">
+            Dúvidas urgentes ou envio de aparelho via Sedex / Motoboy express:
+          </p>
+          <a href="https://wa.me/5511999999999" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono text-blue-400 hover:text-blue-300">
+            <i data-lucide="phone-call" class="w-4 h-4"></i>
+            <span>+55 (11) 99999-9999</span>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-zinc-500 gap-4">
+        <span>© 2026 AURAL HARDWARE LAB. TODOS OS DIREITOS RESERVADOS.</span>
+        <span>AURAL LUXURY HARDWARE 3D DESIGN SYSTEM · BLUE & OBSIDIAN EDITION</span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="phone3d.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
