@@ -9,38 +9,18 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // AURAL Atelier design system — graphite, bronze & brushed steel.
-    // The legacy "blue" utilities are remapped to the bronze accent and the
-    // "cyan / sky / indigo" utilities to brushed steel, so every component
-    // in the page (and the markup rendered by app.js) follows the tokens.
-    const bronze = {
-      50: '#fbf6f0', 100: '#f4e8da', 200: '#e8d1b6', 300: '#d9b48d', 400: '#c99a6c',
-      500: '#b58155', 600: '#9a6a44', 700: '#7c5537', 800: '#5e412b', 900: '#3f2c1e', 950: '#241910'
-    };
-    const steel = {
-      50: '#f5f6f7', 100: '#e9ebee', 200: '#d3d7dc', 300: '#b8bec6', 400: '#9aa2ac',
-      500: '#7d8590', 600: '#626973', 700: '#4b5158', 800: '#34383d', 900: '#212428', 950: '#141619'
-    };
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            blue: bronze,
-            cyan: steel,
-            sky: steel,
-            indigo: steel,
             aural: {
-              bronze: '#c99a6c',
-              steel: '#b8bec6',
-              ivory: '#f2ece4',
-              bg: '#0a0a0b',
-              card: '#141415'
+              blue: '#0066ff',
+              cyan: '#00f0ff',
+              sky: '#38bdf8',
+              ice: '#93c5fd',
+              bg: '#030508',
+              card: '#080c14'
             }
-          },
-          fontFamily: {
-            sans: ['Geist', 'system-ui', 'sans-serif'],
-            display: ['Geist', 'system-ui', 'sans-serif'],
-            mono: ['"Geist Mono"', 'ui-monospace', 'monospace']
           }
         }
       }
@@ -54,20 +34,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
-  <!-- Custom Styles (AURAL Atelier design system) -->
+  <!-- Custom Styles (Blue, Black & White System) -->
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-[#0a0a0b] text-slate-100 selection:bg-blue-600 selection:text-white">
+<body class="bg-[#030508] text-slate-100 selection:bg-blue-600 selection:text-white">
 
   <!-- ==========================================
        HEADER & NAVIGATION
   =========================================== -->
-  <header class="fixed top-0 left-0 w-full z-50 bg-[#0a0a0b]/85 backdrop-blur-xl border-b border-white/[0.08] transition-all">
+  <header class="fixed top-0 left-0 w-full z-50 bg-[#030508]/85 backdrop-blur-xl border-b border-white/[0.08] transition-all">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
       <!-- Brand Logo -->
       <a href="#" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600/25 to-blue-500/10 border border-blue-500/35 flex items-center justify-center group-hover:border-blue-400 group-hover:shadow-[0_0_15px_rgba(201,154,108,0.4)] transition-all">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600/25 to-blue-500/10 border border-blue-500/35 flex items-center justify-center group-hover:border-blue-400 group-hover:shadow-[0_0_15px_rgba(0,102,255,0.4)] transition-all">
           <i data-lucide="cpu" class="w-5 h-5 text-blue-400"></i>
         </div>
         <div>
@@ -86,19 +66,19 @@
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-8">
         <a href="#phone-3d-section" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
-          <span class="nav-index">01 // </span>CELULAR 3D
+          01 // CELULAR 3D
         </a>
         <a href="#servicos" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
-          <span class="nav-index">02 // </span>SERVIÇOS
+          02 // SERVIÇOS
         </a>
         <a href="#orcamento" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
-          <span class="nav-index">03 // </span>SIMULADOR
+          03 // SIMULADOR
         </a>
         <a href="#boutique" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
-          <span class="nav-index">04 // </span>BOUTIQUE
+          04 // BOUTIQUE
         </a>
         <a href="#padrao-aural" class="text-xs font-mono text-zinc-300 hover:text-blue-400 transition-colors tracking-widest uppercase">
-          <span class="nav-index">05 // </span>LABORATÓRIO
+          05 // LABORATÓRIO
         </a>
       </nav>
 
@@ -108,7 +88,7 @@
         <!-- Cart Trigger Button -->
         <button class="btn-open-cart relative p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:border-blue-500/50 hover:bg-white/[0.08] text-white transition-all" aria-label="Abrir Sacola">
           <i data-lucide="shopping-bag" class="w-5 h-5 text-white"></i>
-          <span class="cart-count-badge hidden absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-mono font-bold flex items-center justify-center shadow-[0_0_10px_rgba(201,154,108,0.8)]">0</span>
+          <span class="cart-count-badge hidden absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-mono font-bold flex items-center justify-center shadow-[0_0_10px_rgba(0,102,255,0.8)]">0</span>
         </button>
 
         <!-- CTA Agendar Reparo -->
@@ -126,7 +106,7 @@
     </div>
 
     <!-- Mobile Dropdown Menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-[#111113]/98 border-b border-white/[0.08] px-6 py-6 space-y-4">
+    <div id="mobile-menu" class="hidden md:hidden bg-[#070a14]/98 border-b border-white/[0.08] px-6 py-6 space-y-4">
       <a href="#phone-3d-section" class="block text-sm font-mono text-zinc-300 hover:text-blue-400">01 // CELULAR 3D</a>
       <a href="#servicos" class="block text-sm font-mono text-zinc-300 hover:text-blue-400">02 // SERVIÇOS CIRÚRGICOS</a>
       <a href="#orcamento" class="block text-sm font-mono text-zinc-300 hover:text-blue-400">03 // SIMULADOR DE ORÇAMENTO</a>
@@ -203,7 +183,7 @@
   <!-- ==========================================
        TECHNICAL TRUST METRICS STRIP
   =========================================== -->
-  <section class="py-12 border-y border-white/[0.08] bg-[#0e0e0f]">
+  <section class="py-12 border-y border-white/[0.08] bg-[#050810]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="aural-card p-5 text-center">
@@ -229,7 +209,7 @@
   <!-- ==========================================
        SPECIALIZED REPAIR SERVICES SECTION
   =========================================== -->
-  <section id="servicos" class="py-28 relative border-t border-white/[0.08] bg-[#0e0e0f]">
+  <section id="servicos" class="py-28 relative border-t border-white/[0.08] bg-[#050810]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-20">
@@ -249,7 +229,7 @@
         
         <!-- Service 1: Tela OLED & Vidro a Laser -->
         <div class="aural-card aural-card-blue p-8 tech-bracket">
-          <div class="w-12 h-12 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_15px_rgba(201,154,108,0.25)]">
+          <div class="w-12 h-12 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_15px_rgba(0,102,255,0.25)]">
             <i data-lucide="smartphone" class="w-6 h-6"></i>
           </div>
           <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">[PROCEDIMENTO 01]</span>
@@ -265,7 +245,7 @@
 
         <!-- Service 2: Micro-soldagem de Placa & CPU -->
         <div class="aural-card aural-card-blue p-8 tech-bracket">
-          <div class="w-12 h-12 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-6 shadow-[0_0_15px_rgba(184,190,198,0.2)]">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
             <i data-lucide="cpu" class="w-6 h-6"></i>
           </div>
           <span class="text-xs font-mono text-cyan-400 uppercase tracking-widest">[PROCEDIMENTO 02]</span>
@@ -281,7 +261,7 @@
 
         <!-- Service 3: Bateria de Alta Densidade -->
         <div class="aural-card aural-card-blue p-8 tech-bracket">
-          <div class="w-12 h-12 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_15px_rgba(201,154,108,0.25)]">
+          <div class="w-12 h-12 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_15px_rgba(0,102,255,0.25)]">
             <i data-lucide="battery-charging" class="w-6 h-6"></i>
           </div>
           <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">[PROCEDIMENTO 03]</span>
@@ -297,7 +277,7 @@
 
         <!-- Service 4: Câmeras Studio Pro & Lentes -->
         <div class="aural-card aural-card-blue p-8 tech-bracket">
-          <div class="w-12 h-12 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-6 shadow-[0_0_15px_rgba(184,190,198,0.2)]">
+          <div class="w-12 h-12 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-6 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
             <i data-lucide="camera" class="w-6 h-6"></i>
           </div>
           <span class="text-xs font-mono text-sky-400 uppercase tracking-widest">[PROCEDIMENTO 04]</span>
@@ -313,7 +293,7 @@
 
         <!-- Service 5: Banho Químico Ultrassônico -->
         <div class="aural-card aural-card-blue p-8 tech-bracket">
-          <div class="w-12 h-12 rounded-xl bg-indigo-600/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-6 shadow-[0_0_15px_rgba(184,190,198,0.2)]">
+          <div class="w-12 h-12 rounded-xl bg-indigo-600/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-6 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
             <i data-lucide="droplet" class="w-6 h-6"></i>
           </div>
           <span class="text-xs font-mono text-indigo-400 uppercase tracking-widest">[PROCEDIMENTO 05]</span>
@@ -329,7 +309,7 @@
 
         <!-- Service 6: Vidro Traseiro a Laser -->
         <div class="aural-card aural-card-blue p-8 tech-bracket">
-          <div class="w-12 h-12 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_15px_rgba(201,154,108,0.25)]">
+          <div class="w-12 h-12 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-6 shadow-[0_0_15px_rgba(0,102,255,0.25)]">
             <i data-lucide="zap" class="w-6 h-6"></i>
           </div>
           <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">[PROCEDIMENTO 06]</span>
@@ -351,7 +331,7 @@
   <!-- ==========================================
        INSTANT QUOTE SIMULATOR CALCULATOR
   =========================================== -->
-  <section id="orcamento" class="py-28 relative border-t border-white/[0.08] bg-[#0a0a0b]">
+  <section id="orcamento" class="py-28 relative border-t border-white/[0.08] bg-[#030508]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-16">
@@ -382,7 +362,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-mono text-zinc-400 mb-1.5 uppercase">Fabricante / Linha</label>
-                <select id="calc-brand-select" class="w-full bg-[#18181a] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-display">
+                <select id="calc-brand-select" class="w-full bg-[#0a101d] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-display">
                   <option value="apple">Apple (iPhone Series)</option>
                   <option value="samsung">Samsung (Galaxy S & Z)</option>
                   <option value="xiaomi">Xiaomi (Ultra & Pro)</option>
@@ -392,7 +372,7 @@
 
               <div>
                 <label class="block text-xs font-mono text-zinc-400 mb-1.5 uppercase">Modelo Específico</label>
-                <select id="calc-model-select" class="w-full bg-[#18181a] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-display">
+                <select id="calc-model-select" class="w-full bg-[#0a101d] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-display">
                   <!-- Dynamically populated -->
                 </select>
               </div>
@@ -487,7 +467,7 @@
   <!-- ==========================================
        ACCESSORIES BOUTIQUE SECTION
   =========================================== -->
-  <section id="boutique" class="py-28 relative border-t border-white/[0.08] bg-[#0e0e0f]">
+  <section id="boutique" class="py-28 relative border-t border-white/[0.08] bg-[#050812]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
@@ -535,7 +515,7 @@
   <!-- ==========================================
        AURAL ENGINEERING STANDARDS (LAB PROTOCOL)
   =========================================== -->
-  <section id="padrao-aural" class="py-28 relative border-t border-white/[0.08] bg-[#0a0a0b]">
+  <section id="padrao-aural" class="py-28 relative border-t border-white/[0.08] bg-[#030508]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-20">
@@ -554,7 +534,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         
         <div class="aural-card p-6">
-          <div class="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 shadow-[0_0_12px_rgba(201,154,108,0.2)]">
+          <div class="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 shadow-[0_0_12px_rgba(0,102,255,0.2)]">
             <i data-lucide="eye" class="w-5 h-5"></i>
           </div>
           <h3 class="text-lg font-display font-semibold text-white">Microscopia 4K</h3>
@@ -564,7 +544,7 @@
         </div>
 
         <div class="aural-card p-6">
-          <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-4 shadow-[0_0_12px_rgba(184,190,198,0.2)]">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-4 shadow-[0_0_12px_rgba(0,240,255,0.2)]">
             <i data-lucide="wind" class="w-5 h-5"></i>
           </div>
           <h3 class="text-lg font-display font-semibold text-white">Sala Limpa Classe 1000</h3>
@@ -584,7 +564,7 @@
         </div>
 
         <div class="aural-card p-6">
-          <div class="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 shadow-[0_0_12px_rgba(201,154,108,0.2)]">
+          <div class="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 shadow-[0_0_12px_rgba(0,102,255,0.2)]">
             <i data-lucide="lock" class="w-5 h-5"></i>
           </div>
           <h3 class="text-lg font-display font-semibold text-white">Privacidade & Dados 100%</h3>
@@ -601,7 +581,7 @@
   <!-- ==========================================
        VERIFIED TESTIMONIALS
   =========================================== -->
-  <section class="py-24 border-t border-white/[0.08] bg-[#0e0e0f]">
+  <section class="py-24 border-t border-white/[0.08] bg-[#050711]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-14">
@@ -682,7 +662,7 @@
   <!-- ==========================================
        FREQUENTLY ASKED QUESTIONS (FAQ)
   =========================================== -->
-  <section class="py-24 border-t border-white/[0.08] bg-[#0a0a0b]">
+  <section class="py-24 border-t border-white/[0.08] bg-[#030508]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center mb-14">
@@ -742,7 +722,7 @@
   =========================================== -->
   <div id="cart-overlay" class="fixed inset-0 bg-black/75 backdrop-blur-md z-[100] opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-[#111113] border-l border-white/[0.08] z-[101] translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-[#070b16] border-l border-white/[0.08] z-[101] translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
     
     <!-- Drawer Header -->
     <div class="p-6 border-b border-white/[0.08] flex items-center justify-between">
@@ -761,7 +741,7 @@
     </div>
 
     <!-- Drawer Footer -->
-    <div class="p-6 border-t border-white/[0.08] bg-[#0e0e0f]">
+    <div class="p-6 border-t border-white/[0.08] bg-[#050812]">
       <div class="flex items-center justify-between mb-4">
         <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Subtotal:</span>
         <span id="cart-subtotal" class="text-xl font-display font-bold text-white">R$ 0,00</span>
@@ -783,7 +763,7 @@
   <!-- ==========================================
        FOOTER & ATELIER LOCATION
   =========================================== -->
-  <footer class="border-t border-white/[0.08] bg-[#070708] py-16 text-zinc-400">
+  <footer class="border-t border-white/[0.08] bg-[#020306] py-16 text-zinc-400">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-14">
@@ -839,7 +819,7 @@
 
       <div class="pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-zinc-500 gap-4">
         <span>© 2026 AURAL HARDWARE LAB. TODOS OS DIREITOS RESERVADOS.</span>
-        <span>AURAL ATELIER DESIGN SYSTEM · GRAPHITE & BRONZE</span>
+        <span>AURAL LUXURY HARDWARE 3D DESIGN SYSTEM · BLUE & OBSIDIAN EDITION</span>
       </div>
 
     </div>
