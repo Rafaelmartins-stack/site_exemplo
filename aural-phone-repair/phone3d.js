@@ -118,14 +118,14 @@ class AuralPhoneViewer {
     // Large white key softbox (top-front-right)
     addPanel(0xffffff, 3.2, 10, 6, [6, 7, 9]);
     // Tall strip light on the left for long highlights on the frame
-    addPanel(0xdbeafe, 2.4, 2.2, 16, [-10, 1, 4]);
-    // Brand-coloured rims behind the phone
-    addPanel(0x2563eb, 2.6, 8, 10, [-6, 2, -11]);
-    addPanel(0x00e5ff, 2.2, 3, 12, [10, -2, -6]);
+    addPanel(0xeef1f4, 2.4, 2.2, 16, [-10, 1, 4]);
+    // Brand-coloured rims behind the phone (bronze + brushed steel)
+    addPanel(0xc99a6c, 2.4, 8, 10, [-6, 2, -11]);
+    addPanel(0xb8bec6, 2.0, 3, 12, [10, -2, -6]);
     // Soft overhead fill
     addPanel(0xffffff, 0.9, 14, 14, [0, 14, 0]);
-    // Faint floor bounce
-    addPanel(0x1e3a8a, 0.6, 14, 14, [0, -14, 0]);
+    // Faint warm floor bounce
+    addPanel(0x5e412b, 0.6, 14, 14, [0, -14, 0]);
 
     this.envTarget = pmrem.fromScene(studio, 0.035);
     this.scene.environment = this.envTarget.texture;
@@ -140,23 +140,23 @@ class AuralPhoneViewer {
   createLighting() {
     this.createEnvironment();
 
-    this.scene.add(new THREE.HemisphereLight(0xdbeafe, 0x020617, 0.55));
+    this.scene.add(new THREE.HemisphereLight(0xf4efe8, 0x0a0a0b, 0.55));
 
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
     keyLight.position.set(5, 6, 8);
     this.scene.add(keyLight);
 
-    const blueFill = new THREE.DirectionalLight(0x3b82f6, 1.4);
-    blueFill.position.set(-6, 1, 5);
-    this.scene.add(blueFill);
+    const warmFill = new THREE.DirectionalLight(0xd9b48d, 1.2);
+    warmFill.position.set(-6, 1, 5);
+    this.scene.add(warmFill);
 
-    const cyanRim = new THREE.DirectionalLight(0x00f0ff, 2.2);
-    cyanRim.position.set(4, -4, -5);
-    this.scene.add(cyanRim);
+    const steelRim = new THREE.DirectionalLight(0xd3d7dc, 1.8);
+    steelRim.position.set(4, -4, -5);
+    this.scene.add(steelRim);
 
-    const backRim = new THREE.DirectionalLight(0x60a5fa, 1.6);
-    backRim.position.set(-4, 5, -6);
-    this.scene.add(backRim);
+    const bronzeRim = new THREE.DirectionalLight(0xc99a6c, 1.6);
+    bronzeRim.position.set(-4, 5, -6);
+    this.scene.add(bronzeRim);
   }
 
   /** Soft elliptical shadow below the phone, for a sense of grounding. */
@@ -167,8 +167,8 @@ class AuralPhoneViewer {
     canvas.height = size;
     const ctx = canvas.getContext('2d');
     const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-    gradient.addColorStop(0, 'rgba(37, 99, 235, 0.55)');
-    gradient.addColorStop(0.35, 'rgba(15, 40, 120, 0.3)');
+    gradient.addColorStop(0, 'rgba(201, 154, 108, 0.42)');
+    gradient.addColorStop(0.35, 'rgba(94, 65, 43, 0.25)');
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, size, size);

@@ -384,7 +384,7 @@ function initAccessoriesStore() {
             <div class="absolute top-3 left-3">
               <span class="badge-blue text-[10px]">${item.badge}</span>
             </div>
-            <div class="absolute top-3 right-3 text-[11px] font-mono text-zinc-500">
+            <div class="absolute bottom-3 right-3 text-[10px] font-mono text-zinc-500">
               [REF-${item.id.toUpperCase().slice(0, 6)}]
             </div>
 
