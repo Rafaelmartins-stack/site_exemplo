@@ -79,6 +79,9 @@ class AuralPhoneViewer {
     this.floatGroup.add(this.modelPivot);
 
     this.clock = new THREE.Clock();
+    this.introStart = undefined;
+    this.introDuration = 2200;
+    this.scrollProgress = 0;
     this.lastInteraction = 0;
     this.dragVelocity = { x: 0, y: 0 };
     this.isVisible = true;
@@ -293,7 +296,10 @@ class AuralPhoneViewer {
     this.modelPivot.add(model);
     this.model = model;
     this.isReady = true;
+    this.introStart = performance.now();
+    this.lastInteraction = this.introStart + this.introDuration;
     this.container.classList.add('is-model-ready');
+    document.dispatchEvent(new CustomEvent('aural:phone-ready'));
 
     if (typeof this.options.onReady === 'function') {
       this.options.onReady(model);
@@ -449,13 +455,34 @@ class AuralPhoneViewer {
     this.modelPivot.rotation.y += (targetY - this.modelPivot.rotation.y) * ease;
     this.modelPivot.rotation.z += (targetZ - this.modelPivot.rotation.z) * ease;
 
+    // Entrance: the phone rises from below the fold while spinning into place.
+    let intro = 1;
+    if (this.introStart !== undefined && !this.reducedMotion) {
+      const t = THREE.MathUtils.clamp((performance.now() - this.introStart) / this.introDuration, 0, 1);
+      intro = t === 1 ? 1 : 1 - Math.pow(2, -10 * t); // easeOutExpo
+    }
+
+    // Scroll-linked motion: as the hero scrolls away the phone tilts back,
+    // turns slightly and recedes, so it doesn't just slide off the page.
+    const scrollRange = Math.max(window.innerHeight, 1);
+    const scrollTarget = this.reducedMotion
+      ? 0
+      : THREE.MathUtils.clamp(window.scrollY / scrollRange, 0, 1);
+    this.scrollProgress += (scrollTarget - this.scrollProgress) * Math.min(1, ease * 1.6);
+    const s = this.scrollProgress;
+
     // Slow floating motion, with the contact shadow reacting to the height.
     const float = this.reducedMotion ? 0 : Math.sin(elapsed * 1.1) * 0.09;
-    this.floatGroup.position.y = float;
+    this.floatGroup.position.y = float - (1 - intro) * 4.2 + s * 1.1;
+    this.floatGroup.position.z = -s * 2.4;
+    this.floatGroup.rotation.y = -(1 - intro) * Math.PI * 1.35 + s * 0.6;
+    this.floatGroup.rotation.x = s * 0.42;
+    this.floatGroup.scale.setScalar(0.82 + intro * 0.18);
+
     if (this.contactShadow) {
       const lift = 1 - float * 1.6;
-      this.contactShadow.scale.set(lift, 0.32 * lift, 1);
-      this.contactShadow.material.opacity = THREE.MathUtils.clamp(lift, 0.6, 1);
+      this.contactShadow.scale.set(lift * intro, 0.32 * lift * intro, 1);
+      this.contactShadow.material.opacity = THREE.MathUtils.clamp(lift, 0.6, 1) * intro * (1 - s);
     }
 
     this.renderer.render(this.scene, this.camera);

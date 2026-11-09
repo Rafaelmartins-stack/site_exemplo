@@ -398,3 +398,132 @@ body {
     transform: translateX(0);
   }
 }
+
+/* ==========================================
+   MOTION LAYER (driven by animations.js)
+   Content is only hidden once JS adds .js-motion to <html>.
+   ========================================== */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hero entrance: badge, words of the headline, copy and buttons */
+.js-motion .hero-item,
+.js-motion .hero-heading .hero-word {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(18px);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    filter 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+}
+
+.js-motion .hero-item {
+  transition-delay: var(--hero-delay, 0ms);
+}
+
+.js-motion .hero-heading .hero-word {
+  display: inline-block;
+  transform: translateY(0.45em) rotate(2deg);
+  transform-origin: left bottom;
+  transition-delay: calc(var(--hero-delay, 0ms) + var(--word-index, 0) * 55ms);
+}
+
+.js-motion .hero-in .hero-item,
+.js-motion .hero-in .hero-heading .hero-word {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+/* Scroll reveals */
+.js-motion .reveal,
+.js-motion .reveal-card {
+  opacity: 0;
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo),
+    filter 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.js-motion .reveal {
+  filter: blur(8px);
+  transform: translateY(26px);
+}
+
+.js-motion .reveal-card {
+  filter: blur(6px);
+  transform: translateY(44px) scale(0.965);
+}
+
+.js-motion .reveal.is-in,
+.js-motion .reveal-card.is-in {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+/* Header: denser glass once the page scrolls, plus a progress hairline */
+header {
+  transition: background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+header.is-scrolled {
+  background-color: rgba(3, 5, 8, 0.94);
+  box-shadow: 0 12px 40px -18px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(0, 102, 255, 0.12);
+}
+
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, #0066ff, #38bdf8 60%, #00f0ff);
+  box-shadow: 0 0 12px rgba(0, 102, 255, 0.6);
+  transform-origin: left center;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+/* Cursor spotlight inside cards */
+.aural-card {
+  background-image: radial-gradient(
+    380px circle at var(--spot-x, -600px) var(--spot-y, -600px),
+    rgba(0, 102, 255, 0.13),
+    transparent 60%
+  );
+}
+
+/* Primary buttons: light sweep on hover */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.8s var(--ease-out-expo);
+}
+
+.btn-primary:hover::after {
+  transform: translateX(120%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary::after {
+    display: none;
+  }
+  .animate-bounce {
+    animation: none !important;
+  }
+}
