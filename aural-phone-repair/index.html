@@ -137,7 +137,7 @@
       <!-- ==========================================
            HERO INTRO OVERLAY (Visible on page load)
       =========================================== -->
-      <div id="hero-intro-overlay" class="absolute inset-0 z-20 flex flex-col items-center justify-between pt-24 pb-10 px-4 sm:px-6 pointer-events-none transition-all duration-300">
+      <div id="hero-intro-overlay" class="absolute inset-0 z-20 flex flex-col items-center justify-between pt-24 pb-28 px-4 sm:px-6 pointer-events-none">
         
         <!-- Top Hero Text -->
         <div class="text-center max-w-4xl mx-auto">
@@ -170,11 +170,110 @@
 
         <!-- Bottom Directive Prompt -->
         <div class="flex flex-col items-center justify-center gap-2 text-zinc-300 animate-bounce pointer-events-auto">
-          <span class="text-[10px] font-mono tracking-[0.25em] uppercase text-blue-300">MOVA O CURSOR PARA INCLINAR · ARRASTE PARA GIRAR</span>
-          <span class="text-[9px] font-mono text-zinc-500">SEGURE E ARRASTE PARA VER A TRASEIRA</span>
+          <span class="text-[10px] font-mono tracking-[0.25em] uppercase text-blue-300">ROLE PARA EXPLORAR · ARRASTE PARA GIRAR</span>
+          <span class="text-[9px] font-mono text-zinc-500">OU USE A BARRA ABAIXO COMO UM VÍDEO</span>
           <span class="text-[8px] font-mono text-zinc-600">MODELO 3D: IPHONE 14 PRO · MISTER DUDE / SKETCHFAB · CC BY 4.0</span>
         </div>
 
+      </div>
+
+      <!-- ==========================================
+           SCROLL STORY CHAPTERS
+           data-start / data-end are scroll-progress ranges (0–1).
+           data-side: where the copy sits on desktop.
+      =========================================== -->
+      <div id="story-chapters" class="absolute inset-0 z-20 pointer-events-none" aria-live="polite">
+
+        <article class="story-chapter" data-start="0.12" data-end="0.32" data-side="left">
+          <span class="story-index">01 / 04</span>
+          <span class="badge-blue"><i data-lucide="smartphone" class="w-3.5 h-3.5 text-blue-400"></i>DISPLAY</span>
+          <h2 class="story-title">Tela OLED <span class="text-gradient-blue">preservada.</span></h2>
+          <p class="story-text">Separação criogênica do vidro a -150 °C: mantemos o painel original, a calibração True Tone e os 120 Hz ProMotion.</p>
+          <ul class="story-specs">
+            <li><span>Tempo</span><strong>40 min</strong></li>
+            <li><span>Painel</span><strong>Original</strong></li>
+            <li><span>Garantia</span><strong>1 ano</strong></li>
+          </ul>
+        </article>
+
+        <article class="story-chapter" data-start="0.35" data-end="0.54" data-side="right">
+          <span class="story-index">02 / 04</span>
+          <span class="badge-cyan"><i data-lucide="camera" class="w-3.5 h-3.5"></i>CÂMERAS</span>
+          <h2 class="story-title">Óptica <span class="text-gradient-cyan">recalibrada.</span></h2>
+          <p class="story-text">Troca individual das lentes de safira e recalibração do estabilizador óptico (OIS), sem substituir o módulo inteiro.</p>
+          <ul class="story-specs">
+            <li><span>Tempo</span><strong>45 min</strong></li>
+            <li><span>Lente</span><strong>Safira</strong></li>
+            <li><span>OIS</span><strong>Calibrado</strong></li>
+          </ul>
+        </article>
+
+        <article class="story-chapter" data-start="0.57" data-end="0.74" data-side="left">
+          <span class="story-index">03 / 04</span>
+          <span class="badge-white"><i data-lucide="box" class="w-3.5 h-3.5"></i>ESTRUTURA</span>
+          <h2 class="story-title">Chassi e vidro <span class="text-gradient-silver">traseiro.</span></h2>
+          <p class="story-text">Laser de fibra óptica remove o vidro traseiro sem desmontar o aparelho, preservando a bobina MagSafe e a vedação.</p>
+          <ul class="story-specs">
+            <li><span>Processo</span><strong>Laser</strong></li>
+            <li><span>MagSafe</span><strong>Intacto</strong></li>
+            <li><span>Vedação</span><strong>Refeita</strong></li>
+          </ul>
+        </article>
+
+        <article class="story-chapter" data-start="0.77" data-end="0.92" data-side="right">
+          <span class="story-index">04 / 04</span>
+          <span class="badge-cyan"><i data-lucide="scan-line" class="w-3.5 h-3.5"></i>DIAGNÓSTICO</span>
+          <h2 class="story-title">Raio-X da <span class="text-gradient-cyan">placa lógica.</span></h2>
+          <p class="story-text">Microscopia 4K e termografia mapeiam curtos e trilhas rompidas antes de qualquer solda. Bateria com BMS original transplantado.</p>
+          <ul class="story-specs">
+            <li><span>Placa</span><strong>Micro-solda</strong></li>
+            <li><span>Análise</span><strong>Termografia</strong></li>
+            <li><span>Bateria</span><strong>100%</strong></li>
+          </ul>
+        </article>
+
+        <article class="story-chapter story-outro" data-start="0.95" data-end="1.01" data-side="center">
+          <h2 class="story-title">Pronto para voltar ao <span class="text-gradient-blue">estado de fábrica?</span></h2>
+          <div class="story-actions">
+            <a href="#orcamento" class="btn-primary text-xs py-2.5 px-5">
+              <i data-lucide="calculator" class="w-4 h-4"></i>
+              <span>Simular Orçamento</span>
+            </a>
+            <a href="#servicos" class="btn-secondary text-xs py-2.5 px-5">
+              <i data-lucide="wrench" class="w-4 h-4 text-blue-400"></i>
+              <span>Ver Serviços</span>
+            </a>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- ==========================================
+           STORY PLAYER (video-style scrubber)
+      =========================================== -->
+      <div id="story-player" class="story-player" role="group" aria-label="Linha do tempo da animação do celular">
+        <button type="button" class="story-play" aria-label="Reproduzir animação">
+          <i data-lucide="play" class="icon-play w-4 h-4"></i>
+          <i data-lucide="pause" class="icon-pause w-4 h-4"></i>
+        </button>
+        <div class="story-track-wrap">
+          <div class="story-track" role="slider" tabindex="0" aria-label="Progresso da animação" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="story-track-fill"></div>
+            <div class="story-track-thumb"></div>
+            <span class="story-marker" style="left: 22%"></span>
+            <span class="story-marker" style="left: 44.5%"></span>
+            <span class="story-marker" style="left: 65.5%"></span>
+            <span class="story-marker" style="left: 84.5%"></span>
+          </div>
+          <div class="story-labels" aria-hidden="true">
+            <button type="button" data-seek="0">Início</button>
+            <button type="button" data-seek="0.22">Display</button>
+            <button type="button" data-seek="0.445">Câmeras</button>
+            <button type="button" data-seek="0.655">Estrutura</button>
+            <button type="button" data-seek="0.845">Raio-X</button>
+          </div>
+        </div>
+        <span class="story-time" aria-hidden="true">00:00 / 00:16</span>
       </div>
 
     </div>
@@ -829,5 +928,6 @@
   <script src="phone3d.js"></script>
   <script src="app.js"></script>
   <script src="animations.js"></script>
+  <script src="phone-story.js"></script>
 </body>
 </html>

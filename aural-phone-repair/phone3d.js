@@ -81,7 +81,13 @@ class AuralPhoneViewer {
     this.clock = new THREE.Clock();
     this.introStart = undefined;
     this.introDuration = 2200;
-    this.scrollProgress = 0;
+    // Scroll story: target is set from outside (phone-story.js), the
+    // smoothed value is what the scene actually renders.
+    this.storyTarget = 0;
+    this.storyProgress = 0;
+    this.storyKeyframes = AuralPhoneViewer.createStoryKeyframes();
+    this.xrayLines = [];
+    this.xrayMaterials = [];
     this.lastInteraction = 0;
     this.dragVelocity = { x: 0, y: 0 };
     this.isVisible = true;
@@ -292,6 +298,7 @@ class AuralPhoneViewer {
     });
 
     this.createContactShadow(-(size.y * scale) / 2);
+    this.createXray(model, size.multiplyScalar(scale));
 
     this.modelPivot.add(model);
     this.model = model;
@@ -304,6 +311,135 @@ class AuralPhoneViewer {
     if (typeof this.options.onReady === 'function') {
       this.options.onReady(model);
     }
+  }
+
+  /**
+   * "X-ray" layer used by the diagnostics chapter: glowing feature edges
+   * over the mesh plus a scanning band that sweeps along the phone.
+   */
+  createXray(model, scaledSize) {
+    model.traverse((child) => {
+      if (!child.isMesh) return;
+
+      const edges = new THREE.EdgesGeometry(child.geometry, 20);
+      const lines = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
+        color: 0x5ccfff,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        toneMapped: false
+      }));
+      lines.visible = false;
+      child.add(lines);
+      this.xrayLines.push(lines);
+
+      const materials = Array.isArray(child.material) ? child.material : [child.material];
+      materials.forEach((material) => {
+        if (!material) return;
+        this.xrayMaterials.push({
+          material,
+          color: material.color.clone(),
+          emissiveIntensity: material.emissiveIntensity
+        });
+      });
+    });
+
+    const band = new THREE.Mesh(
+      new THREE.BoxGeometry(scaledSize.x * 1.12, 0.035, scaledSize.z * 1.6),
+      new THREE.MeshBasicMaterial({
+        color: 0x7dd3fc,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        toneMapped: false
+      })
+    );
+    band.visible = false;
+    this.modelPivot.add(band);
+    this.scanBand = band;
+    this.scanRange = scaledSize.y / 2;
+  }
+
+  applyXray(amount, elapsed) {
+    const visible = amount > 0.001;
+    this.xrayLines.forEach((lines) => {
+      lines.visible = visible;
+      lines.material.opacity = amount * 0.95;
+    });
+    this.xrayMaterials.forEach(({ material, color, emissiveIntensity }) => {
+      material.color.copy(color).multiplyScalar(1 - amount * 0.82);
+      material.emissiveIntensity = emissiveIntensity * (1 - amount * 0.75);
+    });
+    if (this.scanBand) {
+      this.scanBand.visible = visible;
+      this.scanBand.material.opacity = amount * 0.85;
+      this.scanBand.position.y = Math.sin(elapsed * 1.6) * this.scanRange * 0.92;
+    }
+  }
+
+  /**
+   * Poses for the scroll story. `p` is the scroll progress (0–1); each
+   * chapter has two keys so the pose holds while its text is on screen.
+   * px/py: phone offset, cz: camera distance, xr: x-ray amount.
+   * On narrow screens the copy sits below the phone, so pxm replaces px
+   * and dcz/dpy pull the camera back and lift the phone into the top half.
+   */
+  static createStoryKeyframes() {
+    const PI = Math.PI;
+    const hero = { rx: 0.08, ry: -0.46, px: 0, py: 0, pxm: 0, cz: 11.5, xr: 0, dcz: 0, dpy: 0 };
+    const narrow = { dcz: 13, dpy: 2.4 };
+    const narrowClose = { dcz: 3.2, dpy: 0.9 };
+    return [
+      { p: 0.0, ...hero },
+      { p: 0.05, ...hero },
+      // 01 Display — front of the phone, copy on the left
+      { p: 0.15, rx: 0.02, ry: PI - 0.26, px: 1.9, py: -0.3, pxm: 0, cz: 11.2, xr: 0, ...narrow },
+      { p: 0.30, rx: -0.03, ry: PI + 0.14, px: 1.9, py: -0.3, pxm: 0, cz: 10.7, xr: 0, ...narrow },
+      // 02 Cameras — close-up on the camera module, copy on the right
+      { p: 0.40, rx: 0.1, ry: 2 * PI + 0.16, px: -0.25, py: -1.95, pxm: 0.75, cz: 5.6, xr: 0, ...narrowClose },
+      { p: 0.52, rx: 0.02, ry: 2 * PI - 0.12, px: -0.25, py: -1.95, pxm: 0.75, cz: 5.2, xr: 0, ...narrowClose },
+      // 03 Frame — side profile of the chassis, copy on the left
+      { p: 0.62, rx: 0.08, ry: 2 * PI + PI / 2 - 0.12, px: 1.7, py: -0.3, pxm: 0, cz: 11, xr: 0, ...narrow },
+      { p: 0.72, rx: -0.05, ry: 2 * PI + PI / 2 + 0.18, px: 1.7, py: -0.3, pxm: 0, cz: 10.6, xr: 0, ...narrow },
+      // 04 X-ray diagnostics — back of the phone, copy on the right
+      { p: 0.81, rx: 0.1, ry: 4 * PI - 0.38, px: -1.9, py: -0.3, pxm: 0, cz: 11.2, xr: 1, ...narrow },
+      { p: 0.90, rx: 0.04, ry: 4 * PI - 0.08, px: -1.9, py: -0.3, pxm: 0, cz: 10.8, xr: 1, ...narrow },
+      // Outro — back to the hero pose (one extra turn)
+      { p: 1.0, ...hero, ry: 4 * PI - 0.46 }
+    ];
+  }
+
+  getStoryPose(progress, isNarrow) {
+    const keys = this.storyKeyframes;
+    let a = keys[0];
+    let b = keys[keys.length - 1];
+    for (let i = 0; i < keys.length - 1; i += 1) {
+      if (progress >= keys[i].p && progress <= keys[i + 1].p) {
+        a = keys[i];
+        b = keys[i + 1];
+        break;
+      }
+    }
+    const span = b.p - a.p;
+    const raw = span > 0 ? THREE.MathUtils.clamp((progress - a.p) / span, 0, 1) : 0;
+    const t = raw * raw * (3 - 2 * raw); // smoothstep
+    const mix = (key) => a[key] + (b[key] - a[key]) * t;
+
+    return {
+      rx: mix('rx'),
+      ry: mix('ry'),
+      // On narrow screens the copy sits below the phone instead of beside it.
+      px: isNarrow ? mix('pxm') : mix('px'),
+      py: mix('py') + (isNarrow ? mix('dpy') : 0),
+      cz: mix('cz') + (isNarrow ? mix('dcz') : 0),
+      xr: mix('xr')
+    };
+  }
+
+  setStoryProgress(value) {
+    this.storyTarget = THREE.MathUtils.clamp(value, 0, 1);
   }
 
   reportError(message) {
@@ -448,12 +584,43 @@ class AuralPhoneViewer {
       : THREE.MathUtils.smoothstep(idleFor, 2500, 5000);
     const idleSway = Math.sin(elapsed * 0.45) * 0.16 * idleWeight;
 
-    const targetX = this.baseRotation.x + this.dragRotation.x + this.hoverRotation.x;
-    const targetY = this.baseRotation.y + this.dragRotation.y + this.hoverRotation.y + idleSway;
+    // Scroll story: smooth the externally-set progress, then sample the pose.
+    const previousStory = this.storyProgress;
+    if (this.reducedMotion) {
+      this.storyProgress = this.storyTarget;
+    } else {
+      this.storyProgress += (this.storyTarget - this.storyProgress) * Math.min(1, ease * 0.9);
+      if (Math.abs(this.storyTarget - this.storyProgress) < 1e-4) this.storyProgress = this.storyTarget;
+    }
+    const storyMoving = Math.abs(this.storyProgress - previousStory) > 1e-4;
+    const isNarrow = this.width / this.height < 0.9;
+    const pose = this.getStoryPose(this.storyProgress, isNarrow);
+
+    // While the story advances, let any manual drag drift back to the
+    // choreographed pose (to the nearest full turn, never unwinding).
+    if (storyMoving && !this.isDragging) {
+      const fullTurn = Math.PI * 2;
+      const settleY = Math.round(this.dragRotation.y / fullTurn) * fullTurn;
+      const settle = Math.min(1, ease * 0.6);
+      this.dragRotation.y += (settleY - this.dragRotation.y) * settle;
+      this.dragRotation.x += (0 - this.dragRotation.x) * settle;
+    }
+
+    // Idle sway is calmer inside a chapter, where the copy needs the
+    // phone to hold still.
+    const heroWeight = 1 - THREE.MathUtils.smoothstep(this.storyProgress, 0.03, 0.1)
+      + THREE.MathUtils.smoothstep(this.storyProgress, 0.93, 1);
+    const sway = idleSway * (0.35 + 0.65 * heroWeight);
+
+    const targetX = pose.rx + this.dragRotation.x + this.hoverRotation.x;
+    const targetY = pose.ry + this.dragRotation.y + this.hoverRotation.y + sway;
     const targetZ = this.hoverRotation.y * -0.035;
     this.modelPivot.rotation.x += (targetX - this.modelPivot.rotation.x) * ease;
     this.modelPivot.rotation.y += (targetY - this.modelPivot.rotation.y) * ease;
     this.modelPivot.rotation.z += (targetZ - this.modelPivot.rotation.z) * ease;
+
+    this.camera.position.z = pose.cz;
+    this.applyXray(pose.xr, elapsed);
 
     // Entrance: the phone rises from below the fold while spinning into place.
     let intro = 1;
@@ -462,27 +629,18 @@ class AuralPhoneViewer {
       intro = t === 1 ? 1 : 1 - Math.pow(2, -10 * t); // easeOutExpo
     }
 
-    // Scroll-linked motion: as the hero scrolls away the phone tilts back,
-    // turns slightly and recedes, so it doesn't just slide off the page.
-    const scrollRange = Math.max(window.innerHeight, 1);
-    const scrollTarget = this.reducedMotion
-      ? 0
-      : THREE.MathUtils.clamp(window.scrollY / scrollRange, 0, 1);
-    this.scrollProgress += (scrollTarget - this.scrollProgress) * Math.min(1, ease * 1.6);
-    const s = this.scrollProgress;
-
     // Slow floating motion, with the contact shadow reacting to the height.
-    const float = this.reducedMotion ? 0 : Math.sin(elapsed * 1.1) * 0.09;
-    this.floatGroup.position.y = float - (1 - intro) * 4.2 + s * 1.1;
-    this.floatGroup.position.z = -s * 2.4;
-    this.floatGroup.rotation.y = -(1 - intro) * Math.PI * 1.35 + s * 0.6;
-    this.floatGroup.rotation.x = s * 0.42;
+    const float = this.reducedMotion ? 0 : Math.sin(elapsed * 1.1) * 0.09 * (0.4 + 0.6 * heroWeight);
+    this.floatGroup.position.x = pose.px;
+    this.floatGroup.position.y = float - (1 - intro) * 4.2 + pose.py;
+    this.floatGroup.rotation.y = -(1 - intro) * Math.PI * 1.35;
     this.floatGroup.scale.setScalar(0.82 + intro * 0.18);
 
     if (this.contactShadow) {
       const lift = 1 - float * 1.6;
+      this.contactShadow.position.x = pose.px;
       this.contactShadow.scale.set(lift * intro, 0.32 * lift * intro, 1);
-      this.contactShadow.material.opacity = THREE.MathUtils.clamp(lift, 0.6, 1) * intro * (1 - s);
+      this.contactShadow.material.opacity = THREE.MathUtils.clamp(lift, 0.6, 1) * intro * heroWeight;
     }
 
     this.renderer.render(this.scene, this.camera);
