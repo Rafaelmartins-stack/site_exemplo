@@ -823,7 +823,7 @@ header.is-scrolled {
     top: auto;
     left: 16px;
     right: 16px;
-    bottom: 96px;
+    bottom: calc(150px + env(safe-area-inset-bottom, 0px));
     width: auto;
     gap: 0.6rem;
     padding: 1rem 1.1rem;
@@ -853,6 +853,14 @@ header.is-scrolled {
   }
   .story-index {
     display: none;
+  }
+
+  /* Player sits higher on phones, clear of the browser's bottom toolbar. */
+  .story-player {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+  #hero-intro-overlay {
+    padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px));
   }
 }
 

@@ -386,9 +386,14 @@ class AuralPhoneViewer {
    * On narrow screens the copy sits below the phone, so pxm replaces px
    * and dcz/dpy pull the camera back and lift the phone into the top half.
    */
+  // Camera distance multiplier on narrow (phone) screens: higher = smaller model.
+  static get NARROW_ZOOM() {
+    return 1.4;
+  }
+
   static createStoryKeyframes() {
     const PI = Math.PI;
-    const hero = { rx: 0.08, ry: -0.46, px: 0, py: 0, pxm: 0, cz: 11.5, xr: 0, dcz: 0, dpy: 0 };
+    const hero = { rx: 0.08, ry: -0.46, px: 0, py: 0, pxm: 0, cz: 11.5, xr: 0, dcz: 6, dpy: 0.8 };
     const narrow = { dcz: 13, dpy: 2.4 };
     const narrowClose = { dcz: 3.2, dpy: 0.9 };
     return [
@@ -427,13 +432,17 @@ class AuralPhoneViewer {
     const t = raw * raw * (3 - 2 * raw); // smoothstep
     const mix = (key) => a[key] + (b[key] - a[key]) * t;
 
+    // On phones the model is drawn a bit smaller: the camera moves back and
+    // vertical offsets scale with it so the phone keeps its place on screen.
+    const zoom = isNarrow ? AuralPhoneViewer.NARROW_ZOOM : 1;
+
     return {
       rx: mix('rx'),
       ry: mix('ry'),
       // On narrow screens the copy sits below the phone instead of beside it.
-      px: isNarrow ? mix('pxm') : mix('px'),
-      py: mix('py') + (isNarrow ? mix('dpy') : 0),
-      cz: mix('cz') + (isNarrow ? mix('dcz') : 0),
+      px: (isNarrow ? mix('pxm') : mix('px')) * zoom,
+      py: (mix('py') + (isNarrow ? mix('dpy') : 0)) * zoom,
+      cz: (mix('cz') + (isNarrow ? mix('dcz') : 0)) * zoom,
       xr: mix('xr')
     };
   }
